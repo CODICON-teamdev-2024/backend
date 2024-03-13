@@ -18,38 +18,58 @@ class ControllerUser {
     })
   }
   find() {
-    return this.data
+    try {
+      return this.data
+    } catch (error) {
+      throw error
+    }
   }
   findById(id) {
-    //buscamos por el id del usuario
-    const rta = this.data.find((item) => item.id === id)
-    return rta
+    try {
+      //buscamos por el id del usuario
+      const rta = this.data.find((item) => item.id === id)
+      return rta
+    } catch (error) {
+      throw error
+    }
   }
   create(data) {
-    //le agregamos un id al usuario
-    data.id = String(this.data.length + 1)
-    this.data.push(data)
-    return data
+    try {
+      //le agregamos un id al usuario
+      data.id = String(this.data.length + 1)
+      this.data.push(data)
+      return data
+    } catch (error) {
+      throw error
+    }
   }
   update(id, changes) {
-    const index = this.data.findIndex((item) => item.id === id)
-    if (index < 0) {
-      return null
+    try {
+      const index = this.data.findIndex((item) => item.id === id)
+      if (index < 0) {
+        return null
+      }
+      const user = this.data[index]
+      this.data[index] = {
+        ...user,
+        ...changes,
+      }
+      return this.data[index]
+    } catch (error) {
+      throw error
     }
-    const user = this.data[index]
-    this.data[index] = {
-      ...user,
-      ...changes,
-    }
-    return this.data[index]
   }
   delete(id) {
-    const index = this.data.findIndex((item) => item.id === id)
-    if (index < 0) {
-      return null
+    try {
+      const index = this.data.findIndex((item) => item.id === id)
+      if (index < 0) {
+        return null
+      }
+      this.data.splice(index, 1)
+      return { id }
+    } catch (error) {
+      throw error
     }
-    this.data.splice(index, 1)
-    return { id }
   }
 }
 
