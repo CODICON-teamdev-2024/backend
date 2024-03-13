@@ -3,6 +3,7 @@ import cors from 'cors'
 import { config } from '../config/config.js'
 import pkg from 'express-ipfilter';
 import path from 'path';
+import { user } from './components/users/network.js';
 
 const { IpFilter } = pkg;
 
@@ -16,11 +17,11 @@ whiteList['cors'] = {
   origin: [atob(corsAllow)],
 }
 
-whiteList['ips'] = function() {
+whiteList['ips'] = function () {
   return ipsAllow
 }
 
-clientIp = function(req) {
+clientIp = function (req) {
   return req.headers['x-forwarded-for'] ? (req.headers['x-forwarded-for']).split(',')[0] : ""
 }
 
@@ -42,20 +43,25 @@ const createApp = () => {
   });
 
   // Development | is used to validated IPs Address
-  app.use(function(req, res, next) {
-		IpFilter(whiteList.ips, {mode: "allow", log: false, detectIp: clientIp})(req, res, function(err) {
-			if (err === undefined) {
-				return next();
-			}
-			res.status(403).json({
+  app.use(function (req, res, next) {
+    IpFilter(whiteList.ips, { mode: "allow", log: false, detectIp: clientIp })(req, res, function (err) {
+      if (err === undefined) {
+        return next();
+      }
+      res.status(403).json({
         message: 'Forbidden',
         code: 403,
         error: "You are not authorized to access this page.",
       });
-		});
-	});
+    });
+  });
+
+
+  app.use(express.json())
 
   app.use('/api/v1', router)
+
+  router.use('/users', user)
 
   router.get('/', (req, res) => {
     res.send('Hello World!')
