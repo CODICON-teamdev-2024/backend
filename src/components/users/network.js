@@ -4,6 +4,7 @@ import { userCreate, userFindUserId, userUpdate } from "./schema.js"
 import { ControllerUser } from "./controller.js"
 import { successResponse } from "../../middleware/response.js"
 
+
 const controller = new ControllerUser()
 
 const user = Router()
@@ -32,7 +33,6 @@ user.get("/:id",
       }
       successResponse(req, res, rta)
     } catch (error) {
-
       next(error)
     }
   })
@@ -53,6 +53,7 @@ user.post("/",
       next(error)
     }
   })
+
 
 //actualizar usuario
 user.patch("/:id",

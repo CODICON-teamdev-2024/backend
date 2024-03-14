@@ -6,6 +6,7 @@ import path from 'path';
 import { user } from './components/users/network.js';
 import { errorBoomHandler, errorHandler, errorLogs } from './middleware/errors.js';
 
+
 const { IpFilter } = pkg;
 
 const { corsAllow, ipsAllow } = config.whiteList
