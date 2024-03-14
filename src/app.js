@@ -4,6 +4,8 @@ import { config } from '../config/config.js'
 import pkg from 'express-ipfilter';
 import path from 'path';
 import { user } from './components/users/network.js';
+import { errorBoomHandler, errorHandler, errorLogs } from './middleware/errors.js';
+
 
 const { IpFilter } = pkg;
 
@@ -59,9 +61,15 @@ const createApp = () => {
 
   app.use(express.json())
 
+
   app.use('/api/v1', router)
 
   router.use('/users', user)
+
+
+  app.use(errorLogs)
+  app.use(errorBoomHandler)
+  app.use(errorHandler)
 
   router.get('/', (req, res) => {
     res.send('Hello World!')

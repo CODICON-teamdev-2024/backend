@@ -2,18 +2,19 @@ import express, { Router } from "express"
 import { validatorHandler } from "../../middleware/validSchema.js"
 import { userCreate, userFindUserId, userUpdate } from "./schema.js"
 import { ControllerUser } from "./controller.js"
+import { successResponse } from "../../middleware/response.js"
+
 
 const controller = new ControllerUser()
 
 const user = Router()
 
+//buscar todos los usuarios
 user.get("/",
-  // middleware
-  // validatorHandler(userSchema, "body"),
   (req, res, next) => {
     try {
       const rta = controller.find()
-      res.json(rta)
+      successResponse(req, res, rta, 200)
     } catch (error) {
       next(error)
     }
@@ -25,11 +26,13 @@ user.get("/:id",
   (req, res, next) => {
     try {
       const { id } = req.params
-      const rta = controller.findById(id)
-      res.json(rta)
+      const data = controller.findById(id)
+      const rta = {
+        body: data,
+        message: `The user with id ${id} has been found successfully.`,
+      }
+      successResponse(req, res, rta)
     } catch (error) {
-      console.log(`Error: ${error}`)
-
       next(error)
     }
   })
@@ -40,9 +43,12 @@ user.post("/",
   (req, res, next) => {
     try {
       const dataNewUser = req.body
-      const rta = controller.create(dataNewUser)
-
-      res.json(rta)
+      const data = controller.create(dataNewUser)
+      const rta = {
+        body: data,
+        message: "The user has been created successfully.",
+      }
+      successResponse(req, res, rta, 201)
     } catch (error) {
       next(error)
     }
@@ -57,8 +63,12 @@ user.patch("/:id",
     try {
       const { id } = req.params
       const changes = req.body
-      const rta = controller.update(id, changes)
-      res.json(rta)
+      const data = controller.update(id, changes)
+      const rta = {
+        body: data,
+        message: `The user with id ${id} has been updated successfully.`,
+      }
+      successResponse(req, res, rta)
     } catch (error) {
       next(error)
     }
@@ -70,8 +80,12 @@ user.delete("/:id",
   (req, res, next) => {
     try {
       const { id } = req.params
-      const rta = controller.delete(id)
-      res.json(rta)
+      const data = controller.delete(id)
+      const rta = {
+        body: data,
+        message: `The user with id ${id} has been deleted successfully.`,
+      }
+      successResponse(req, res, rta)
     } catch (error) {
       next(error)
     }
