@@ -4,82 +4,102 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>API del Backend - Versión 1</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f0f0f0;
-            color: #333;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-        }
-
-        .container {
-            text-align: center;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-            background: linear-gradient(45deg, #00c3ff, #0084ff);
-            color: #fff;
-        }
-
-        h1 {
-            font-size: 36px;
-            margin-bottom: 10px;
-        }
-
-        h2 {
-            font-size: 24px;
-            margin-bottom: 20px;
-        }
-
-        p {
-            font-size: 18px;
-            line-height: 1.6;
-            margin-bottom: 20px;
-        }
-
-        .developers {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-top: 30px;
-        }
-
-        .developer {
-            margin: 0 20px;
-        }
-
-        .developer img {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            object-fit: cover;
-            margin-bottom: 10px;
-        }
-
-        .developer p {
-            font-size: 14px;
-            font-weight: bold;
-        }
-    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
 </head>
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        height: 100vh;
+        background-image: linear-gradient( 86.3deg,  rgba(0,119,182,1) 3.6%, rgba(8,24,68,1) 87.6% );
+        
+    }
+
+    .texto-backend {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    h1 {
+        font-size: 2.25rem;
+        font-weight: bold;
+        color: white;
+    }
+
+    h2 {
+        font-size: 1.5rem;
+        padding-bottom: 1.25rem;
+    }
+
+    .caja-api {
+        display: flex;
+        justify-content: space-around;
+        width: 90vw;
+        padding-top: 4rem;
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+
+    article{
+        font-size: 1.25rem;
+        max-width: 56rem ;
+        padding: 4rem 0 0 0;
+    }
+
+    .introduccion-api {
+        text-align: center ;
+        padding: 1.25rem;
+        border-radius: 0.75rem;
+        box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        color: white;
+        margin-top: 5rem;
+    }
+    
+    .introduccion-api h1 {
+        padding-bottom: 10px ;
+    }
+
+    p {
+        font-size: 1.25rem;
+        line-height: 12px;
+        padding-bottom: 1.25rem;
+    }
+
+    .developers {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding-bottom: 2rem;
+    }
+
+    .devOPs , .backend-dev {
+        padding: 0 1.25rem 0 1.25rem;
+    }
+
+</style>
 <body>
-    <div class="container">
+    <div class="texto-backend">
+        <h1>API Backend 
+            <span class="animate__animated animate__flash animate__slow animate__infinite">_</span>
+        </h1>
+       
+    </div>
+    <div class="caja-api">
+        <article>Una API ​ es una pieza de código que permite a diferentes aplicaciones comunicarse entre sí y compartir información y funcionalidades. Una API es un intermediario entre dos sistemas, que permite que una aplicación se comunique con otra y pida datos o acciones específicas.</article>
+        <img src="https://raw.githubusercontent.com/7oSkaaa/7oSkaaa/main/Images/Right_Side.gif" width="">
+    </div>
+    <div class="introduccion-api">
         <h1>Bienvenido a la API del Backend - Versión 1</h1>
         <h2>Desarrollada con pasión y dedicación</h2>
         <p>Explora las potentes funcionalidades de nuestra API para mejorar tu experiencia digital.</p>
 
         <div class="developers">
-            <div class="developer">
+            <div class="backend-dev">
                 <img src="pedro_montes.jpg" alt="Pedro Montes">
                 <p>Pedro Montes</p>
                 <p>Backend Developer</p>
             </div>
-            <div class="developer">
+            <div class="devOps">
                 <img src="carlos_palacios.jpg" alt="Carlos Palacios">
                 <p>Carlos Palacios</p>
                 <p>Backend Developer & DevOps</p>
