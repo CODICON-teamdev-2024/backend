@@ -6,7 +6,9 @@
   },
   "extends": [
     "eslint:recommended",
-    "prettier"
+    "prettier", 
+    "plugin:import/errors", 
+    "plugin:import/warnings"
   ],
   "plugins": ["jest"],
   "overrides": [
@@ -33,6 +35,7 @@
     "jest/no-focused-tests": "error",
     "jest/no-identical-title": "error",
     "jest/prefer-to-have-length": "warn",
-    "jest/valid-expect": "error"
+    "jest/valid-expect": "error",
+    "import/extensions": ["error", "ignorePackages"]
   }
 }
