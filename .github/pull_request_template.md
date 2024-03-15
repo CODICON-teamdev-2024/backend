@@ -1,42 +1,21 @@
-## Resumen de Cambios
+## Pull Request: Actualizar la dependencia X
 
-- [ ] Agregado X
-- [ ] Modificado Y
-- [ ] Corregido Z
+**Descripción:**
 
-## Impacto Potencial
+* **Resumen del cambio:** Se actualiza la dependencia X a la versión Y.
+* **Motivación:** La versión anterior de la dependencia X tenía un problema de seguridad.
+* **Implementación:** Se ha actualizado el archivo `package.json` y se ha ejecutado el comando `npm install`.
+* **Pruebas:** Se han ejecutado los tests del proyecto y todos han pasado correctamente.
+* **Riesgos:** No se conocen riesgos asociados a este cambio.
+* **Documentación:** Se ha actualizado la sección de dependencias de la documentación.
 
-- Podría afectar a los usuarios que ...
-- Se espera que sea retrocompatible con ...
+**Lista de verificación:**
 
-## Instrucciones para Revisar
+* [x] He verificado que todos los tests pasan correctamente.
+* [x] He actualizado la documentación del proyecto si es necesario.
+* [x] He realizado pruebas manuales para verificar que el cambio funciona correctamente.
+* [x] He seguido las convenciones de estilo del proyecto.
 
-1. Clona el repositorio.
-2. Ejecuta el comando X.
-3. Verifica que Y se comporte según lo esperado.
+**Comentarios adicionales:**
 
-## Capturas de Pantalla
-
-### Antes
-
-[Imagen antes]
-
-### Después
-
-[Imagen después]
-
-## Notas Adicionales
-
-- Tomé esta decisión de diseño debido a ...
-- Limitaciones conocidas: ...
-
-## Enlaces Relacionados
-
-- [Enlace al problema relacionado]
-- [Enlace a PR relacionado]
-
-## Lista de Verificación
-
-- [ ] Se realizaron pruebas unitarias.
-- [ ] Se actualizaron las documentaciones existentes.
-- [ ] Se comprobó la compatibilidad con los navegadores.
+* Se agradece a @usuario por reportar el problema de seguridad.
