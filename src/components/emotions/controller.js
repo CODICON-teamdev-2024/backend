@@ -4,18 +4,18 @@ class ControllerUser {
     this.data = []
 
     //aquí se simula la base de datos con un array, pero usaríamos faker
-    this.data.push({
-      "id": "1",
-      "name": "Francesca_Krak",
-      "email": "Moshe32@yahoo.com",
-      "password": "0fNNzdErugoXvTh"
-    })
-    this.data.push({
-      "id": "2",
-      "name": "Laurina",
-      "email": "lauir@gmail.com",
-      "password": "0fNNzdErugoXvTh"
-    })
+    // this.data.push({
+    //   "id": "1",
+    //   "name": "Francesca_Krak",
+    //   "email": "Moshe32@yahoo.com",
+    //   "password": "0fNNzdErugoXvTh"
+    // })
+    // this.data.push({
+    //   "id": "2",
+    //   "name": "Laurina",
+    //   "email": "lauir@gmail.com",
+    //   "password": "0fNNzdErugoXvTh"
+    // })
   }
   find() {
     try {

@@ -6,6 +6,7 @@ const emotionCreate = Joi.object({
   // color hexadecimal
   color: Joi.string().pattern(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/).required(),
   description: Joi.string().min(3).required(),
+  idUser: Joi.string(),
 });
 
 const emotionCreateAi = Joi.object({
