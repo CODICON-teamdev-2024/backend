@@ -5,6 +5,7 @@ import pkg from 'express-ipfilter';
 import path from 'path';
 import { user } from './components/users/network.js';
 import { errorBoomHandler, errorHandler, errorLogs } from './middleware/errors.js';
+import { emotion } from './components/emotions/network.js';
 
 
 const { IpFilter } = pkg;
@@ -65,6 +66,7 @@ const createApp = () => {
   app.use('/api/v1', router)
 
   router.use('/users', user)
+  router.use('/emotions', emotion)
 
 
   app.use(errorLogs)
