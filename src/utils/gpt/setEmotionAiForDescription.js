@@ -1,10 +1,11 @@
 const promptAssistJsonEmotions = `
-  me devolverás 3 datos siempre en estilo json :
+  no importa el idioma , tu responde en  español, y me devolverás 3 datos siempre en estilo json :
   {
     emocion: "".
     color: "en hexadecimal"
     emoji: ""
   }
+  por nada del mundo me devolverás un error, o algo diferente a esta estructura.
   yo te voy a decir como me siento y tu me devuelves los 3 datos.
   recuerda, un json
   `
