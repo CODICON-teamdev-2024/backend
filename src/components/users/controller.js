@@ -6,14 +6,12 @@ class ControllerUser {
     //aquí se simula la base de datos con un array, pero usaríamos faker
     this.data.push({
       "id": "1",
-      "name": "Francesca_Krak",
-      "email": "Moshe32@yahoo.com",
-      "password": "0fNNzdErugoXvTh"
+      "username": "root",
+      "password": "root"
     })
     this.data.push({
       "id": "2",
-      "name": "Laurina",
-      "email": "lauir@gmail.com",
+      "username": "lauir@gmail.com",
       "password": "0fNNzdErugoXvTh"
     })
   }
@@ -28,6 +26,15 @@ class ControllerUser {
     try {
       //buscamos por el id del usuario
       const rta = this.data.find((item) => item.id === id)
+      return rta
+    } catch (error) {
+      throw error
+    }
+  }
+  findByUserName(username) {
+    try {
+      //buscamos por el id del usuario
+      const rta = this.data.find((item) => item.username === username)
       return rta
     } catch (error) {
       throw error

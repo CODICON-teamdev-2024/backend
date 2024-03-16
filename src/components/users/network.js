@@ -3,11 +3,31 @@ import { validatorHandler } from "../../middleware/validSchema.js"
 import { userCreate, userFindUserId, userUpdate } from "./schema.js"
 import { ControllerUser } from "./controller.js"
 import { successResponse } from "../../middleware/response.js"
-
+import { passport } from "./../../middleware/passport/index.js"
+import { createToken } from "../../utils/bcrypt/createToken.js"
 
 const controller = new ControllerUser()
 
 const user = Router()
+
+//login
+user.post('/login',
+  validatorHandler(userCreate, "body"),
+  passport.authenticate('local', { session: false }),
+  (req, res, next) => {
+    try {
+      //devolvemos el token
+      const token = createToken(req.user)
+      res.set('Authorization', `Bearer ${token}`);
+      const rta = {
+        token: token,
+      }
+      successResponse(req, res, rta, 200)
+    } catch (error) {
+      next(error)
+    }
+  }
+)
 
 //buscar todos los usuarios
 user.get("/",

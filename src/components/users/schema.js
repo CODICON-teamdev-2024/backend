@@ -1,9 +1,8 @@
 import Joi from 'joi';
 
 const userCreate = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().email().required(),
-  password: Joi.string().min(6).required(),
+  username: Joi.string().min(3).max(250).required(),
+  password: Joi.string().min(6).max(250).required(),
 });
 
 const userFindUserId = Joi.object({
@@ -11,9 +10,8 @@ const userFindUserId = Joi.object({
 });
 
 const userUpdate = Joi.object({
-  name: Joi.string(),
-  email: Joi.string().email(),
-  password: Joi.string().min(6),
+  username: Joi.string().min(3).max(250).required(),
+  password: Joi.string().min(6).max(250).required(),
 });
 
 export { userCreate, userFindUserId, userUpdate };
