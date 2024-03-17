@@ -17,6 +17,7 @@ user.post('/login',
   (req, res, next) => {
     try {
       //devolvemos el token
+      //el req.user es el usuario que se logueo y lo guardamos en el middleware passport
       const token = createToken(req.user)
       res.set('Authorization', `Bearer ${token}`);
       const rta = {

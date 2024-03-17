@@ -4,10 +4,11 @@ const secret = process.env.AUTH_JWT_SECRET || 'secret'
 function createToken(user) {
   const { id, username } = user
   const payload = {
-    sub: id,
+    id,
     username,
   }
-  const token = jwt.sign(payload, secret)
+  //encodeamos el payload con el secret y le damos un tiempo de expiración
+  const token = jwt.sign(payload, secret,)
   return token
 }
 

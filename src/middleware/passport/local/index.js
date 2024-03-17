@@ -11,12 +11,12 @@ const localStrategy = new LocalStrategy({
     try {
       const user = await controller.findByUserName(username)
       if (!user) {
-        return done(null, Boom.unauthorized("User not found"))
+        return done(Boom.unauthorized("User not found"), false)
       }
       //compare password
       const match = user.password === password
       if (!match) {
-        return done(null, Boom.unauthorized("Invalid password"))
+        return done(Boom.unauthorized("Invalid password"), false)
       }
       const rta = { ...user }
       delete rta.password

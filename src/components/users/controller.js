@@ -7,7 +7,7 @@ class ControllerUser {
     this.data.push({
       "id": "1",
       "username": "root",
-      "password": "root"
+      "password": "root123"
     })
     this.data.push({
       "id": "2",
