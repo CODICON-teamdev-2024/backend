@@ -5,6 +5,7 @@ import { ControllerUser } from "./controller.js"
 import { successResponse } from "../../middleware/response.js"
 import Boom from "@hapi/boom"
 import { setEmocionAiForDescription } from "../../utils/gpt/setEmotionAiForDescription.js"
+import { decryptToken } from "../../middleware/decryptToken.js"
 
 
 const controller = new ControllerUser()
@@ -41,12 +42,15 @@ emotion.get("/:id",
 
 emotion.post("/",
   //puede o no tener un token valido con el id de usuario asociado
+  decryptToken,
   validatorHandler(emotionCreate, "body"),
   (req, res, next) => {
     try {
       const dataNewEmotion = req.body
+
       //miramos si tiene un id de usuario asociado
-      if (req?.user?.id) dataNewEmotion.idUser = req.user.id
+      const user = req?.user
+      if (user?.id) dataNewEmotion.idUser = user.id
 
       const data = controller.create(dataNewEmotion)
       const rta = {
@@ -68,7 +72,10 @@ emotion.post("/ai",
       //creamos una nuevo emocion según la descripción que recibimos
       const dataNewEmotion = await setEmocionAiForDescription(description)
 
-      if (req?.user?.id) dataNewEmotion.idUser = req.user.id
+      //miramos si tiene un id de usuario asociado
+      const user = req?.user
+      if (user?.id) dataNewEmotion.idUser = user.id
+
       const data = controller.create(dataNewEmotion)
 
       const rta = {
