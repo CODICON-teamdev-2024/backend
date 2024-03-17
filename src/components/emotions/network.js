@@ -12,7 +12,6 @@ const controller = new ControllerEmotion()
 
 const emotion = Router()
 
-//buscar todos los usuarios
 emotion.get("/",
   async (req, res, next) => {
     try {
@@ -23,7 +22,35 @@ emotion.get("/",
     }
   })
 
-//buscar usuario por id
+emotion.get("/user/:id",
+  validatorHandler(emotionFindEmotionId, "params"),
+  async (req, res, next) => {
+    try {
+      const { id } = req.params
+      const rta = await controller.findByUserId(id)
+      successResponse(req, res, rta, 200)
+    } catch (error) {
+      next(error)
+    }
+  })
+
+//el ultimo sentimiento que se ha creado del usuario
+emotion.get("/user/:id/last",
+  validatorHandler(emotionFindEmotionId, "params"),
+  async (req, res, next) => {
+    try {
+      const { id } = req.params
+      const rta = await controller.findByUserId(id)
+      if (rta.length === 0) {
+        throw Boom.notFound('The user has no emotions.')
+      }
+      const lastEmotion = rta.reduce((prev, current) => (prev.createdAt > current.createdAt) ? prev : current)
+      successResponse(req, res, lastEmotion, 200)
+    } catch (error) {
+      next(error)
+    }
+  })
+
 emotion.get("/:id",
   validatorHandler(emotionFindEmotionId, "params"),
   async (req, res, next) => {
@@ -89,7 +116,6 @@ emotion.post("/ai",
   })
 
 
-//actualizar usuario
 emotion.patch("/:id",
   validatorHandler(emotionFindEmotionId, "params"),
   validatorHandler(emotionUpdate, "body"),
@@ -108,7 +134,6 @@ emotion.patch("/:id",
     }
   })
 
-//eliminar usuario
 emotion.delete("/:id",
   validatorHandler(emotionFindEmotionId, "params"),
   async (req, res, next) => {

@@ -1,3 +1,4 @@
+import Boom from "@hapi/boom";
 import FirestoreDB from "../../db/firebase/index.js";
 
 class ControllerEmotion {
@@ -26,10 +27,22 @@ class ControllerEmotion {
       throw error
     }
   }
+  async findByUserId(id) {
+    try {
+      //consulta y filtramos todos los documentos que tengan el id del usuario
+      const filter = ['idUser', '==', id]
+      const emotions = await this.db.getDocumentsByFilter(...filter)
+      const rta = emotions.map(emotion => emotion.data)
+      return rta
+    } catch (error) {
+      throw error
+    }
+  }
   async create(data) {
     try {
       //le agregamos un id al usuario
       data.id = String(this.makeId())
+      data.createdAt = new Date()
       const rta = await this.db.setDocument(data.id, data)
       return data
     } catch (error) {
