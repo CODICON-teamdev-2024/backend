@@ -3,6 +3,9 @@ import cors from 'cors'
 import { config } from '../config/config.js'
 import pkg from 'express-ipfilter';
 import path from 'path';
+import swaggerUi from 'swagger-ui-express';
+import YAML from 'yamljs';
+
 import { user } from './components/users/network.js';
 import { errorBoomHandler, errorHandler, errorLogs } from './middleware/errors.js';
 import { emotion } from './components/emotions/network.js';
@@ -32,6 +35,11 @@ clientIp = function (req) {
 const createApp = () => {
   const app = express()
   const router = Router()
+
+
+  const swaggerDocument = YAML.load(('./api-definition.yaml'));
+  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
 
   // welcome project
   const publicDirectoryPath = path.join(new URL('.', import.meta.url).pathname, 'public');
