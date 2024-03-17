@@ -68,7 +68,7 @@ class FirestoreDB {
    */
   async deleteDocument(docId) {
     await this.collection.doc(docId).delete();
-    console.log('Documento eliminado');
+    // console.log('Documento eliminado');
   }
 
   /**

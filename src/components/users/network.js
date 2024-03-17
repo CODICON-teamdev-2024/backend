@@ -14,7 +14,7 @@ const user = Router()
 user.post('/login',
   validatorHandler(userCreate, "body"),
   passport.authenticate('local', { session: false }),
-  (req, res, next) => {
+  async (req, res, next) => {
     try {
       //devolvemos el token
       //el req.user es el usuario que se logueo y lo guardamos en el middleware passport
@@ -32,9 +32,9 @@ user.post('/login',
 
 //buscar todos los usuarios
 user.get("/",
-  (req, res, next) => {
+  async (req, res, next) => {
     try {
-      const rta = controller.find()
+      const rta = await controller.find()
       successResponse(req, res, rta, 200)
     } catch (error) {
       next(error)
@@ -44,10 +44,10 @@ user.get("/",
 //buscar usuario por id
 user.get("/:id",
   validatorHandler(userFindUserId, "params"),
-  (req, res, next) => {
+  async (req, res, next) => {
     try {
       const { id } = req.params
-      const data = controller.findById(id)
+      const data = await controller.findById(id)
       const rta = {
         body: data,
         message: `The user with id ${id} has been found successfully.`,
@@ -61,10 +61,10 @@ user.get("/:id",
 //crear usuario
 user.post("/",
   validatorHandler(userCreate, "body"),
-  (req, res, next) => {
+  async (req, res, next) => {
     try {
       const dataNewUser = req.body
-      const data = controller.create(dataNewUser)
+      const data = await controller.create(dataNewUser)
       const rta = {
         body: data,
         message: "The user has been created successfully.",
@@ -80,11 +80,11 @@ user.post("/",
 user.patch("/:id",
   validatorHandler(userFindUserId, "params"),
   validatorHandler(userUpdate, "body"),
-  (req, res, next) => {
+  async (req, res, next) => {
     try {
       const { id } = req.params
       const changes = req.body
-      const data = controller.update(id, changes)
+      const data = await controller.update(id, changes)
       const rta = {
         body: data,
         message: `The user with id ${id} has been updated successfully.`,
@@ -98,10 +98,10 @@ user.patch("/:id",
 //eliminar usuario
 user.delete("/:id",
   validatorHandler(userFindUserId, "params"),
-  (req, res, next) => {
+  async (req, res, next) => {
     try {
       const { id } = req.params
-      const data = controller.delete(id)
+      const data = await controller.delete(id)
       const rta = {
         body: data,
         message: `The user with id ${id} has been deleted successfully.`,
