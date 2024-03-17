@@ -1,0 +1,300 @@
+openapi: 3.0.3
+info:
+  title: API de Usuarios y Emociones
+  description: API para gestionar usuarios y emociones, incluyendo operaciones para login, crear, buscar, actualizar y eliminar.
+  version: "1.0"
+servers:
+  - url: http://localhost:3000
+    description: Servidor de Desarrollo
+paths:
+  /login:
+    post:
+      summary: Autenticación de usuario y obtención de token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCreate'
+      responses:
+        '200':
+          description: Usuario autenticado exitosamente
+          headers:
+            Authorization:
+              schema:
+                type: string
+              description: Token de acceso para el usuario autenticado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    description: Token de acceso JWT
+
+  /users:
+    get:
+      summary: Lista todos los usuarios
+      responses:
+        '200':
+          description: Lista de usuarios
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+    post:
+      summary: Crea un nuevo usuario
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCreate'
+      responses:
+        '201':
+          description: Usuario creado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+  /users/{id}:
+    get:
+      summary: Buscar usuario por ID
+      parameters:
+        - $ref: '#/components/schemas/IDParam'
+      responses:
+        '200':
+          description: Usuario encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+    patch:
+      summary: Actualizar usuario
+      parameters:
+        - $ref: '#/components/schemas/IDParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserUpdate'
+      responses:
+        '200':
+          description: Usuario actualizado exitosamente
+    delete:
+      summary: Eliminar usuario
+      parameters:
+        - $ref: '#/components/schemas/IDParam'
+      responses:
+        '200':
+          description: Usuario eliminado exitosamente
+
+  /emotions:
+    get:
+      summary: Lista todas las emociones
+      responses:
+        '200':
+          description: Lista de emociones obtenida con éxito
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Emotion'
+    post:
+      summary: Crea una nueva emoción
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmotionCreate'
+      responses:
+        '201':
+          description: Emoción creada con éxito
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Emotion'
+
+  /emotions/{id}:
+    get:
+      summary: Busca una emoción por su ID
+      parameters:
+        - $ref: '#/components/schemas/IDParam'
+      responses:
+        '200':
+          description: Emoción encontrada con éxito
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Emotion'
+    patch:
+      summary: Actualiza una emoción existente
+      parameters:
+        - $ref: '#/components/schemas/IDParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmotionUpdate'
+      responses:
+        '200':
+          description: Emoción actualizada con éxito
+    delete:
+      summary: Elimina una emoción
+      parameters:
+        - $ref: '#/components/schemas/IDParam'
+      responses:
+        '200':
+          description: Emoción eliminada con éxito
+
+  /emotions/ai:
+    post:
+      summary: Crea una emoción basada en IA a partir de una descripción
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmotionCreateAi'
+      responses:
+        '201':
+          description: Emoción creada por IA con éxito
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Emotion'
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+        username:
+          type: string
+          minLength: 3
+          maxLength: 250
+        password:
+          type: string
+          minLength: 6
+          maxLength: 250
+    UserCreate:
+      type: object
+      properties:
+        username:
+          type: string
+          minLength: 3
+          maxLength: 250
+        password:
+          type: string
+          minLength: 6
+          maxLength: 250
+      required:
+        - username
+        - password
+    UserUpdate:
+      type: object
+      properties:
+        username:
+          type: string
+          minLength: 3
+          maxLength: 250
+        password:
+          type: string
+          minLength: 6
+          maxLength: 250
+      required:
+        - username
+        - password
+    Emotion:
+      type: object
+      properties:
+        id:
+          type: string
+        emotion:
+          type: string
+          minLength: 2
+          maxLength: 30
+        emoji:
+          type: string
+          pattern: "[\\p{Emoji_Presentation}\\u{1F3FB}-\\u{1F3FF}\\u{1F9B0}-\\u{1F9B3}\\u{1F9B8}-\\u{1F9B9}]"
+          minLength: 1
+          maxLength: 3
+        color:
+          type: string
+          pattern: "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$"
+        description:
+          type: string
+          minLength: 3
+          maxLength: 250
+    EmotionCreate:
+      type: object
+      properties:
+        emotion:
+          type: string
+          minLength: 2
+          maxLength: 30
+        emoji:
+          type: string
+          pattern: "[\\p{Emoji_Presentation}\\u{1F3FB}-\\u{1F3FF}\\u{1F9B0}-\\u{1F9B3}\\u{1F9B8}-\\u{1F9B9}]"
+          minLength: 1
+          maxLength: 3
+        color:
+          type: string
+          pattern: "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$"
+        description:
+          type: string
+          minLength: 3
+          maxLength: 250
+      required:
+        - emotion
+        - emoji
+        - color
+        - description
+    EmotionCreateAi:
+      type: object
+      properties:
+        description:
+          type: string
+          minLength: 3
+          maxLength: 250
+      required:
+        - description
+    EmotionUpdate:
+      type: object
+      properties:
+        emotion:
+          type: string
+          minLength: 2
+          maxLength: 30
+        emoji:
+          type: string
+          pattern: "[\\p{Emoji_Presentation}\\u{1F3FB}-\\u{1F3FF}\\u{1F9B0}-\\u{1F9B3}\\u{1F9B8}-\\u{1F9B9}]"
+          minLength: 1
+          maxLength: 3
+        color:
+          type: string
+          pattern: "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$"
+        description:
+          type: string
+          minLength: 3
+          maxLength: 250
+      required:
+        - emotion
+        - emoji
+        - color
+        - description
+    IDParam:
+      in: path
+      name: id
+      required: true
+      schema:
+        type: string

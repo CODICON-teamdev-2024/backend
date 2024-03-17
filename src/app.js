@@ -3,6 +3,13 @@ import cors from 'cors'
 import { config } from '../config/config.js'
 import pkg from 'express-ipfilter';
 import path from 'path';
+import swaggerUi from 'swagger-ui-express';
+import YAML from 'yamljs';
+
+import { user } from './components/users/network.js';
+import { errorBoomHandler, errorHandler, errorLogs } from './middleware/errors.js';
+import { emotion } from './components/emotions/network.js';
+
 
 const { IpFilter } = pkg;
 
@@ -16,11 +23,11 @@ whiteList['cors'] = {
   origin: [atob(corsAllow)],
 }
 
-whiteList['ips'] = function() {
+whiteList['ips'] = function () {
   return ipsAllow
 }
 
-clientIp = function(req) {
+clientIp = function (req) {
   return req.headers['x-forwarded-for'] ? (req.headers['x-forwarded-for']).split(',')[0] : ""
 }
 
@@ -28,6 +35,11 @@ clientIp = function(req) {
 const createApp = () => {
   const app = express()
   const router = Router()
+
+
+  const swaggerDocument = YAML.load(('./api-definition.yaml'));
+  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
 
   // welcome project
   const publicDirectoryPath = path.join(new URL('.', import.meta.url).pathname, 'public');
@@ -42,20 +54,32 @@ const createApp = () => {
   });
 
   // Development | is used to validated IPs Address
-  app.use(function(req, res, next) {
-		IpFilter(whiteList.ips, {mode: "allow", log: false, detectIp: clientIp})(req, res, function(err) {
-			if (err === undefined) {
-				return next();
-			}
-			res.status(403).json({
+  app.use(function (req, res, next) {
+    IpFilter(whiteList.ips, { mode: "allow", log: false, detectIp: clientIp })(req, res, function (err) {
+      if (err === undefined) {
+        return next();
+      }
+      res.status(403).json({
         message: 'Forbidden',
         code: 403,
         error: "You are not authorized to access this page.",
       });
-		});
-	});
+    });
+  });
+
+
+  app.use(express.json())
+
 
   app.use('/api/v1', router)
+
+  router.use('/users', user)
+  router.use('/emotions', emotion)
+
+
+  app.use(errorLogs)
+  app.use(errorBoomHandler)
+  app.use(errorHandler)
 
   router.get('/', (req, res) => {
     res.send('Hello World!')
