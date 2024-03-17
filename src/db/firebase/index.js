@@ -44,7 +44,7 @@ class FirestoreDB {
       // console.log('No se encontró el documento!');
       return null;
     } else {
-      console.log('Documento:', doc.data());
+      // console.log('Documento:', doc.data());
       return doc.data();
     }
   }
@@ -58,7 +58,7 @@ class FirestoreDB {
   async updateDocument(docId, newData) {
     const docRef = this.collection.doc(docId);
     await docRef.update(newData);
-    console.log('Documento actualizado');
+    // console.log('Documento actualizado');
   }
 
   /**
