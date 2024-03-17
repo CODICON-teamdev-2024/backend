@@ -1,6 +1,7 @@
 import LocalStrategy from "passport-local"
-import { ControllerUser } from "./../../../components/users/controller.js"
 import Boom from "@hapi/boom"
+import bcrypt from "bcrypt"
+import { ControllerUser } from "./../../../components/users/controller.js"
 
 const controller = new ControllerUser()
 
@@ -14,7 +15,8 @@ const localStrategy = new LocalStrategy({
         return done(Boom.unauthorized("User not found"), false)
       }
       //compare password
-      const match = user.password === password
+      //desencriptamos la contraseña
+      const match = await bcrypt.compare(password, user.password)
       if (!match) {
         return done(Boom.unauthorized("Invalid password"), false)
       }

@@ -1,76 +1,87 @@
+import Boom from "@hapi/boom";
+import FirestoreDB from "../../db/firebase/index.js";
 
-class ControllerUser {
+class ControllerEmotion {
   constructor() {
-    this.data = []
-
-    //aquí se simula la base de datos con un array, pero usaríamos faker
-    // this.data.push({
-    //   "id": "1",
-    //   "name": "Francesca_Krak",
-    //   "email": "Moshe32@yahoo.com",
-    //   "password": "0fNNzdErugoXvTh"
-    // })
-    // this.data.push({
-    //   "id": "2",
-    //   "name": "Laurina",
-    //   "email": "lauir@gmail.com",
-    //   "password": "0fNNzdErugoXvTh"
-    // })
+    this.COLLECTION_NAME = "emotions";
+    this.db = new FirestoreDB(this.COLLECTION_NAME);
   }
-  find() {
+  async find() {
     try {
-      return this.data
-    } catch (error) {
-      throw error
-    }
-  }
-  findById(id) {
-    try {
-      //buscamos por el id del usuario
-      const rta = this.data.find((item) => item.id === id)
+      const emotions = await this.db.getAllDocuments()
+      const rta = emotions.map(emotion => emotion.data)
       return rta
     } catch (error) {
       throw error
     }
   }
-  create(data) {
+  async findById(id) {
+    try {
+      const emotion = await this.db.getDocument(id)
+      if (!emotion) {
+        throw Boom.notFound('emotion not found')
+      }
+      //buscamos por el id del usuario
+      return emotion
+    } catch (error) {
+      throw error
+    }
+  }
+  async findByUserId(id) {
+    try {
+      //consulta y filtramos todos los documentos que tengan el id del usuario
+      const filter = ['idUser', '==', id]
+      const emotions = await this.db.getDocumentsByFilter(...filter)
+      const rta = emotions.map(emotion => emotion.data)
+      return rta
+    } catch (error) {
+      throw error
+    }
+  }
+  async create(data) {
     try {
       //le agregamos un id al usuario
-      data.id = String(this.data.length + 1)
-      this.data.push(data)
+      data.id = String(this.makeId())
+      data.createdAt = new Date()
+      const rta = await this.db.setDocument(data.id, data)
       return data
     } catch (error) {
       throw error
     }
   }
-  update(id, changes) {
+  async update(id, changes) {
     try {
-      const index = this.data.findIndex((item) => item.id === id)
-      if (index < 0) {
-        return null
+
+      const emotion = await this.findById(id)
+      const data = {
+        ...emotion,
+        ...changes
       }
-      const user = this.data[index]
-      this.data[index] = {
-        ...user,
-        ...changes,
-      }
-      return this.data[index]
+      const rta = await this.db.setDocument(data.id, data)
+      return data
     } catch (error) {
       throw error
     }
   }
-  delete(id) {
+  async delete(id) {
     try {
-      const index = this.data.findIndex((item) => item.id === id)
-      if (index < 0) {
-        return null
-      }
-      this.data.splice(index, 1)
+      const emotion = await this.findById(id)
+      const rta = await this.db.deleteDocument(id)
+
       return { id }
     } catch (error) {
       throw error
     }
   }
+  makeId(length = 5) {
+    var result = '';
+    var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var charactersLength = characters.length;
+    for (var i = 0; i < length; i++) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+  }
 }
 
-export { ControllerUser }
+export { ControllerEmotion }

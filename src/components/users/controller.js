@@ -1,82 +1,91 @@
+import bcrypt from 'bcrypt';
+import FirestoreDB from '../../db/firebase/index.js';
+import Boom from '@hapi/boom';
 
 class ControllerUser {
   constructor() {
-    this.data = []
-
-    //aquí se simula la base de datos con un array, pero usaríamos faker
-    this.data.push({
-      "id": "1",
-      "username": "root",
-      "password": "root123"
-    })
-    this.data.push({
-      "id": "2",
-      "username": "lauir@gmail.com",
-      "password": "0fNNzdErugoXvTh"
-    })
+    this.COLLECTION_NAME = "users";
+    this.db = new FirestoreDB(this.COLLECTION_NAME);
   }
-  find() {
+  async find() {
     try {
-      return this.data
-    } catch (error) {
-      throw error
-    }
-  }
-  findById(id) {
-    try {
-      //buscamos por el id del usuario
-      const rta = this.data.find((item) => item.id === id)
+      const users = await this.db.getAllDocuments()
+      const rta = users.map(user => user.data)
       return rta
     } catch (error) {
       throw error
     }
   }
-  findByUserName(username) {
+  async findById(id) {
     try {
+      const user = await this.db.getDocument(id)
+      if (!user) {
+        throw Boom.notFound('User not found')
+      }
       //buscamos por el id del usuario
-      const rta = this.data.find((item) => item.username === username)
-      return rta
+      return user
     } catch (error) {
       throw error
     }
   }
-  create(data) {
+  async findByUserName(username) {
+    try {
+      //buscamos por el id del usuario
+      const user = await this.db.getDocumentsByFilter("username", "==", username)
+      if (user.length === 0) {
+        throw Boom.notFound('User not found')
+      }
+      return user[0].data
+    } catch (error) {
+      throw error
+    }
+  }
+  async create(data) {
     try {
       //le agregamos un id al usuario
-      data.id = String(this.data.length + 1)
-      this.data.push(data)
+      data.id = String(this.makeId())
+      //encriptamos la contraseña
+      data.password = await bcrypt.hash(data.password, 10)
+      //agregamos el usuario a la base de datos
+      const rta = await this.db.setDocument(data.id, data)
+      delete data.password
       return data
     } catch (error) {
       throw error
     }
   }
-  update(id, changes) {
+  async update(id, changes) {
     try {
-      const index = this.data.findIndex((item) => item.id === id)
-      if (index < 0) {
-        return null
-      }
-      const user = this.data[index]
-      this.data[index] = {
+
+      const user = await this.findById(id)
+      const data = {
         ...user,
-        ...changes,
+        ...changes
       }
-      return this.data[index]
+      const rta = await this.db.setDocument(data.id, data)
+      return data
     } catch (error) {
       throw error
     }
   }
-  delete(id) {
+  async delete(id) {
     try {
-      const index = this.data.findIndex((item) => item.id === id)
-      if (index < 0) {
-        return null
-      }
-      this.data.splice(index, 1)
+      const user = await this.findById(id)
+      const rta = await this.db.deleteDocument(id)
+
       return { id }
     } catch (error) {
       throw error
     }
+  }
+  makeId(length = 5) {
+    var result = '';
+    var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var charactersLength = characters.length;
+    for (var i = 0; i < length; i++) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
   }
 }
 
